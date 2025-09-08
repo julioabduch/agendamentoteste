@@ -2,7 +2,7 @@
   <div class="min-h-screen flex">
     <!-- Coluna da Esquerda - Formulário -->
     <div class="w-1/2 bg-gray-50 flex items-center justify-center p-12">
-      <LoginForm />
+  <LoginForm />
     </div>
 
     <!-- Coluna da Direita - Branding -->
@@ -51,4 +51,7 @@
 
 <script setup lang="ts">
 import LoginForm from '../components/LoginForm.vue'
+definePageMeta({ 
+  layout: 'auth' as any
+})
 </script>

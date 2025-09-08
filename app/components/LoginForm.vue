@@ -5,7 +5,12 @@
       <p class="text-gray-500 text-lg">Entre com suas credenciais para acessar sua conta</p>
     </div>
 
-    <form class="space-y-6" @submit.prevent>
+    <form class="space-y-6" @submit.prevent="handleLogin">
+      <!-- Mensagem de erro -->
+      <div v-if="error" class="bg-red-50 border border-red-200 rounded-lg p-3">
+        <p class="text-sm text-red-600">{{ error }}</p>
+      </div>
+
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-3">
@@ -16,6 +21,7 @@
             type="email"
             placeholder="seu@email.com"
             :icon="EnvelopeIcon"
+            :disabled="isLoading"
           />
         </div>
 
@@ -28,13 +34,15 @@
             type="password"
             placeholder="Digite sua senha"
             :icon="LockClosedIcon"
+            :disabled="isLoading"
           />
         </div>
       </div>
 
       <div class="pt-2">
-        <BaseButton>
-          Entrar
+        <BaseButton :disabled="isLoading || !email || !password">
+          <span v-if="isLoading">Entrando...</span>
+          <span v-else>Entrar</span>
         </BaseButton>
       </div>
 
@@ -48,11 +56,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
 import BaseInput from './BaseInput.vue'
 import BaseButton from './BaseButton.vue'
 
 const email = ref('')
 const password = ref('')
+
+// Usar o composable de autenticação
+const { signIn, isLoading, error, clearError } = useAuth()
+
+// Função para lidar com o login
+const handleLogin = async () => {
+  // Limpar erros anteriores
+  clearError()
+  
+  // Validação básica
+  if (!email.value || !password.value) {
+    return
+  }
+
+  // Tentar fazer login
+  const result = await signIn(email.value, password.value)
+  
+  if (result.success) {
+    // Login bem-sucedido, o redirecionamento é feito no composable
+    console.log('Login realizado com sucesso!')
+  }
+  // Erros são tratados automaticamente pelo composable
+}
+
+// Limpar erro quando o usuário começar a digitar
+watch([email, password], () => {
+  if (error.value) {
+    clearError()
+  }
+})
 </script>
