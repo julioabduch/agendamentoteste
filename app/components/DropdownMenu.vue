@@ -33,6 +33,24 @@
         class="absolute bottom-full left-0 right-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
       >
         <div class="py-1">
+          <!-- Informações do usuário -->
+          <div class="px-3 py-2 border-b border-gray-100">
+            <div class="text-sm font-medium text-gray-900">
+              {{ userStore.userName }}
+            </div>
+            <div class="flex items-center space-x-2 mt-1">
+              <span 
+                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                :class="userStore.isAdmin 
+                  ? 'bg-purple-100 text-purple-800' 
+                  : 'bg-gray-100 text-gray-800'
+                "
+              >
+                {{ userStore.isAdmin ? 'Administrador' : 'Usuário' }}
+              </span>
+            </div>
+          </div>
+          
           <!-- Perfil -->
           <button
             @click="handlePerfil"
@@ -76,6 +94,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isCollapsed: false
 })
+
+// Usar o store do usuário para exibir informações
+const userStore = useUserStore()
 
 const isOpen = ref(false)
 const dropdownContainer = ref<HTMLElement>()
