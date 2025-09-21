@@ -46,13 +46,24 @@
         </div>
 
         <!-- Ações -->
-        <div class="flex items-end">
+        <div class="flex items-end space-x-2 md:col-span-2">
           <BaseButton
             @click="limparFiltros"
             variant="outline"
-            class="w-full"
+            class="flex-1"
           >
             Limpar Filtros
+          </BaseButton>
+          
+          <BaseButton
+            @click="gerarPDF"
+            variant="primary"
+            class="flex-1"
+            :loading="gerandoPDF"
+            :disabled="agendamentos.length === 0"
+          >
+            <DocumentArrowDownIcon class="h-4 w-4 mr-2" />
+            Gerar PDF
           </BaseButton>
         </div>
       </div>
@@ -137,12 +148,34 @@
         Agendamentos Encontrados ({{ agendamentos.length }})
       </h2>
       
-      <div class="grid gap-4">
-        <CardAgendamento
+      <!-- Lista temporária sem CardAgendamento -->
+      <div class="space-y-3">
+        <div 
           v-for="agendamento in agendamentos"
           :key="agendamento.agendamento_id"
-          :agendamento="agendamento"
-        />
+          class="bg-white border rounded-lg p-4 shadow-sm"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
+            <div>
+              <span class="font-medium">Data:</span> 
+              {{ agendamento.data ? new Date(agendamento.data).toLocaleDateString('pt-BR') : 'N/A' }}
+            </div>
+            <div>
+              <span class="font-medium">Horário:</span>
+              {{ agendamento.hora_inicio }} - {{ agendamento.hora_fim }}
+            </div>
+            <div>
+              <span class="font-medium">Cliente:</span>
+              {{ agendamento.cliente_nome || 'N/A' }}
+            </div>
+            <div>
+              <span class="font-medium">Status:</span>
+              <span :class="agendamento.cancelado ? 'text-red-600' : 'text-green-600'">
+                {{ agendamento.cancelado ? 'Cancelado' : 'Ativo' }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -161,8 +194,9 @@
 
 <script setup lang="ts">
 import BaseButton from './BaseButton.vue'
-import CardAgendamento from './CardAgendamento.vue'
+// // import CardAgendamento from "~/app/components/CardAgendamento.vue"
 import { useAgendamento } from '../composables/useAgendamento'
+import { usePDFClient } from '../composables/usePDFClient'
 import { useToast } from '../composables/useToast'
 import type { AgendamentoRelatorio } from '../../shared/types/database'
 import {
@@ -170,16 +204,19 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   UserGroupIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  DocumentArrowDownIcon
 } from '@heroicons/vue/24/outline'
 
 // Composables
 const { buscarRelatorioAgendamentos } = useAgendamento()
+const { gerarRelatorioPDF } = usePDFClient()
 const toast = useToast()
 
 // Estado
 const agendamentos = ref<AgendamentoRelatorio[]>([])
 const carregando = ref(false)
+const gerandoPDF = ref(false)
 const erro = ref<string | null>(null)
 
 // Filtros
@@ -246,6 +283,36 @@ function limparFiltros() {
     incluirCancelados: false
   }
   buscarDados()
+}
+
+async function gerarPDF() {
+  if (agendamentos.value.length === 0) {
+    toast.error('Sem dados', 'Não há agendamentos para gerar o relatório.')
+    return
+  }
+
+  gerandoPDF.value = true
+
+  try {
+    const filtrosAplicados = {
+      ...(filtros.value.dataInicio && { dataInicio: filtros.value.dataInicio }),
+      ...(filtros.value.dataFim && { dataFim: filtros.value.dataFim }),
+      incluirCancelados: filtros.value.incluirCancelados
+    }
+
+    const resultado = await gerarRelatorioPDF(agendamentos.value, filtrosAplicados)
+
+    if (resultado.success) {
+      toast.success('PDF gerado!', `Arquivo ${resultado.nomeArquivo} baixado com sucesso.`)
+    } else {
+      toast.error('Erro ao gerar PDF', resultado.error)
+    }
+  } catch (error: any) {
+    console.error('Erro ao gerar PDF:', error)
+    toast.error('Erro inesperado', 'Ocorreu um erro ao gerar o relatório em PDF.')
+  } finally {
+    gerandoPDF.value = false
+  }
 }
 
 // Buscar dados ao montar o componente
