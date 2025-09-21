@@ -28,7 +28,7 @@
           >
             <div
               v-if="isOpen"
-              class="relative w-full max-w-lg transform overflow-hidden rounded-lg bg-white shadow-xl transition-all"
+              class="relative w-full max-w-2xl transform overflow-hidden rounded-lg bg-white shadow-xl transition-all"
               @click.stop
             >
               <!-- Header -->
@@ -82,6 +82,7 @@
 
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import BaseButton from './BaseButton.vue'
 
 interface Props {
   isOpen: boolean
