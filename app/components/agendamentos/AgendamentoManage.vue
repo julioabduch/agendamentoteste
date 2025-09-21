@@ -14,8 +14,16 @@
           <ProfissionalInfo />
         </div>
         
-        <!-- Lado direito: Botão Novo Agendamento -->
-        <div class="flex-shrink-0">
+        <!-- Lado direito: Avatar e Botão Novo Agendamento -->
+        <div class="flex-shrink-0 flex items-center gap-3">
+          <!-- Avatar Upload -->
+          <AvatarUpload 
+            :avatar-url="null"
+            :user-name="userStore.profile?.nome"
+            @upload="handleAvatarUpload"
+          />
+          
+          <!-- Botão Novo -->
           <BaseButton 
             @click="novoAgendamento"
             variant="primary"
@@ -102,12 +110,16 @@ import BaseButton from '../BaseButton.vue'
 import ModalNovoAgendamento from '../ModalNovoAgendamento.vue'
 import ModalAgendamento from '../ModalAgendamento.vue'
 import ModalCliente from '../ModalCliente.vue'
+import AvatarUpload from '../AvatarUpload.vue'
 import { PlusIcon } from '@heroicons/vue/24/outline'
 import type { AgendamentoSchedule } from '../../../shared/types/agendamento'
 import type { Agendamento } from '../../../shared/types/database'
 
 // Acessar o store de agendamento
 const agendamentoStore = useAgendamentoStore()
+
+// Acessar o store do usuário
+const userStore = useUserStore()
 
 // Usar o composable de profissionais para ter acesso ao profissional atual
 const { profissionais, fetchProfissionais, clientes, fetchClientes } = useProfissionais()
@@ -234,6 +246,13 @@ onMounted(async () => {
   // Depois buscar agendamentos do primeiro profissional
   await carregarAgendamentos()
 })
+
+// Função para lidar com upload de avatar
+function handleAvatarUpload(file: File) {
+  console.log('Avatar uploaded:', file.name, file.size)
+  // TODO: Implementar upload real para Supabase Storage
+  // Por enquanto apenas log para demonstração
+}
 
 // Componente principal para gerenciar agendamentos
 </script>

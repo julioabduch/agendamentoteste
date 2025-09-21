@@ -2,7 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase', '@pinia/nuxt'],
+  modules: [
+    '@nuxtjs/tailwindcss', 
+    '@nuxtjs/supabase', 
+    '@pinia/nuxt',
+    '@vite-pwa/nuxt'
+  ],
   supabase: {
     redirectOptions: {
       login: '/login',
