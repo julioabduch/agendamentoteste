@@ -1,21 +1,21 @@
 <template>
-  <div class="p-4 h-full flex flex-col">
+  <div class="p-2 sm:p-4 h-full flex flex-col">
     <!-- Header - altura flexível para acomodar componentes -->
-    <div class="border-2 border-dashed border-blue-500 p-4 mb-4 flex flex-col">
+    <div class="border-2 border-dashed border-blue-500 p-2 sm:p-4 mb-4 flex flex-col">
       <!-- Primeira linha: Controlador, Profissional e Botão Novo -->
-      <div class="flex items-center justify-between mb-2">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2">
         <!-- Lado esquerdo: Controlador de semana -->
-        <div class="flex-shrink-0">
+        <div class="w-full sm:w-auto sm:flex-shrink-0 order-2 sm:order-1">
           <SemanaController />
         </div>
         
         <!-- Centro: Informações do profissional -->
-        <div class="flex-1 flex justify-center">
+        <div class="w-full sm:flex-1 sm:flex sm:justify-center order-3 sm:order-2">
           <ProfissionalInfo />
         </div>
         
         <!-- Lado direito: Avatar e Botão Novo Agendamento -->
-        <div class="flex-shrink-0 flex items-center gap-3">
+        <div class="w-full sm:w-auto sm:flex-shrink-0 flex items-center justify-between sm:justify-end gap-3 order-1 sm:order-3">
           <!-- Avatar Upload -->
           <AvatarUpload 
             :avatar-url="null"
@@ -31,7 +31,7 @@
             class="flex items-center gap-2"
           >
             <PlusIcon class="w-4 h-4" />
-            Novo
+            <span class="hidden xs:inline">Novo</span>
           </BaseButton>
         </div>
       </div>

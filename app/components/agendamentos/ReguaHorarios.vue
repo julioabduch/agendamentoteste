@@ -1,15 +1,15 @@
 <template>
   <div class="flex flex-col h-full bg-white rounded-lg border border-gray-200 overflow-hidden">
     <!-- Grade de horários - apenas horários, sem cabeçalho de dias -->
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 overflow-y-auto overflow-x-auto">
       <div 
         v-for="hora in horarios" 
         :key="hora"
-        class="grid grid-cols-8 border-b border-gray-100 hover:bg-gray-25 transition-colors duration-150"
+        class="grid grid-cols-8 border-b border-gray-100 hover:bg-gray-25 transition-colors duration-150 min-w-[600px] sm:min-w-0"
       >
         <!-- Coluna do horário -->
-        <div class="p-3 border-r border-gray-200 bg-gray-50 flex items-center">
-          <span class="text-sm font-medium text-gray-700">
+        <div class="p-2 sm:p-3 border-r border-gray-200 bg-gray-50 flex items-center min-w-[60px]">
+          <span class="text-xs sm:text-sm font-medium text-gray-700">
             {{ String(hora).padStart(2, '0') }}:00
           </span>
         </div>
@@ -18,10 +18,9 @@
         <div 
           v-for="dayIndex in 7" 
           :key="dayIndex"
-          class="p-1 border-r border-gray-100 last:border-r-0 min-h-[50px] relative cursor-pointer hover:bg-blue-50 transition-colors duration-150"
+          class="p-0.5 sm:p-1 border-r border-gray-100 last:border-r-0 min-h-[40px] sm:min-h-[50px] relative cursor-pointer hover:bg-blue-50 transition-colors duration-150 min-w-[70px] sm:min-w-0"
           @click="handleCellClick(hora, dayIndex - 1)"
         >
-          <!-- Slot para ItemAgendamento -->
           <div class="relative h-full">
             <!-- Exemplo de agendamento (pode ser substituído por dados reais) -->
             <ItemAgendamento

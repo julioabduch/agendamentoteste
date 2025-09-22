@@ -1,22 +1,22 @@
 <template>
-  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-3 min-w-[240px]">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-2 sm:p-3 min-w-0 w-full sm:min-w-[240px]">
     <!-- Período da semana e navegação em linha única -->
     <div class="flex items-center justify-between">
       <!-- Botão Voltar Semana -->
       <button
         @click="voltarSemana"
-        class="group relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 transition-all duration-200 hover:shadow-sm hover:scale-105 active:scale-95"
+        class="group relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 transition-all duration-200 hover:shadow-sm hover:scale-105 active:scale-95 flex-shrink-0"
         title="Semana anterior"
       >
-        <ChevronLeftIcon class="w-4 h-4 text-blue-600 group-hover:text-blue-700" />
+        <ChevronLeftIcon class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 group-hover:text-blue-700" />
       </button>
       
       <!-- Informações centrais -->
-      <div class="text-center flex-1 mx-3">
-        <h3 class="text-sm font-semibold text-gray-800 leading-tight">
+      <div class="text-center flex-1 mx-2 sm:mx-3 min-w-0">
+        <h3 class="text-xs sm:text-sm font-semibold text-gray-800 leading-tight truncate">
           {{ periodoSemana }}
         </h3>
-        <p class="text-xs text-gray-500 mt-0.5">
+        <p class="text-xs text-gray-500 mt-0.5 hidden sm:block">
           {{ mesAnoAtual }}
         </p>
       </div>
@@ -24,15 +24,15 @@
       <!-- Botão Avançar Semana -->
       <button
         @click="avancarSemana"
-        class="group relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 transition-all duration-200 hover:shadow-sm hover:scale-105 active:scale-95"
+        class="group relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 hover:from-blue-100 hover:to-indigo-100 hover:border-blue-300 transition-all duration-200 hover:shadow-sm hover:scale-105 active:scale-95 flex-shrink-0"
         title="Próxima semana"
       >
-        <ChevronRightIcon class="w-4 h-4 text-blue-600 group-hover:text-blue-700" />
+        <ChevronRightIcon class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 group-hover:text-blue-700" />
       </button>
     </div>
     
     <!-- Indicador visual compacto da semana -->
-    <div class="mt-2 flex justify-center">
+    <div class="mt-2 flex justify-center hidden sm:flex">
       <div class="flex space-x-0.5">
         <div 
           v-for="(dia, index) in agendamentoStore.diasSemana" 
