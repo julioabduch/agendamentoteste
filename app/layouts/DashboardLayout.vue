@@ -24,9 +24,9 @@
       </div>
     </Transition>
 
-    <!-- Desktop Sidebar -->
-    <div class="hidden lg:flex lg:flex-shrink-0">
-      <AppSidebar />
+    <!-- Desktop Sidebar - Container flexível que se ajusta ao estado colapsado -->
+    <div class="hidden lg:block flex-shrink-0" :style="{ width: sidebarWidth + 'px' }">
+      <AppSidebar @width-changed="handleSidebarWidthChanged" />
     </div>
     
     <!-- Main Content Area -->
@@ -60,12 +60,20 @@ import AppSidebarMobile from '~/components/AppSidebarMobile.vue'
 // Estado da sidebar para mobile
 const sidebarOpen = ref(false)
 
+// Estado da largura da sidebar para desktop
+const sidebarWidth = ref(256) // 256px = w-64
+
 function openSidebar() {
   sidebarOpen.value = true
 }
 
 function closeSidebar() {
   sidebarOpen.value = false
+}
+
+// Função para lidar com mudança de largura da sidebar
+function handleSidebarWidthChanged(width: number) {
+  sidebarWidth.value = width
 }
 
 // Fechar sidebar quando clicar em links (mobile)
