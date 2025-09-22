@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { 
   HomeIcon, 
   CalendarIcon, 
@@ -118,11 +118,6 @@ import {
   ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 
-// Emits
-const emit = defineEmits<{
-  'width-changed': [width: number]
-}>()
-
 // Estado do sidebar colapsado
 const isCollapsed = ref(false)
 
@@ -130,10 +125,4 @@ const isCollapsed = ref(false)
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
 }
-
-// Watch para emitir mudanças de largura
-watch(isCollapsed, (collapsed) => {
-  const width = collapsed ? 64 : 256 // w-16 = 64px, w-64 = 256px
-  emit('width-changed', width)
-}, { immediate: true })
 </script>

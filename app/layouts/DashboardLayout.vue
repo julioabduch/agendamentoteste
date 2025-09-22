@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-50">
+  <div class="h-screen bg-gray-50" :class="{ 'grid': true, 'grid-cols-[auto_1fr]': true, 'lg:grid': true }">
     <!-- Mobile backdrop -->
     <div 
       v-if="sidebarOpen" 
@@ -24,13 +24,13 @@
       </div>
     </Transition>
 
-    <!-- Desktop Sidebar - Container flexível que se ajusta ao estado colapsado -->
-    <div class="hidden lg:block flex-shrink-0" :style="{ width: sidebarWidth + 'px' }">
-      <AppSidebar @width-changed="handleSidebarWidthChanged" />
+    <!-- Desktop Sidebar - sem container fixo, apenas a sidebar -->
+    <div class="hidden lg:block">
+      <AppSidebar />
     </div>
     
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+    <!-- Main Content Area - ocupará todo espaço restante automaticamente -->
+    <div class="flex flex-col overflow-hidden min-w-0">
       <!-- Mobile header -->
       <div class="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between flex-shrink-0">
         <button
@@ -60,20 +60,12 @@ import AppSidebarMobile from '~/components/AppSidebarMobile.vue'
 // Estado da sidebar para mobile
 const sidebarOpen = ref(false)
 
-// Estado da largura da sidebar para desktop
-const sidebarWidth = ref(256) // 256px = w-64
-
 function openSidebar() {
   sidebarOpen.value = true
 }
 
 function closeSidebar() {
   sidebarOpen.value = false
-}
-
-// Função para lidar com mudança de largura da sidebar
-function handleSidebarWidthChanged(width: number) {
-  sidebarWidth.value = width
 }
 
 // Fechar sidebar quando clicar em links (mobile)
