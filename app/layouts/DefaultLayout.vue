@@ -1,12 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="min-h-screen bg-gray-50 grid grid-cols-[auto_1fr]">
     <!-- Sidebar -->
-    <div class="w-64 flex-shrink-0">
-      <AppSidebar />
-    </div>
+    <AppSidebar />
     
     <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col">
+    <main class="flex flex-col">
       <!-- Top Header Bar (opcional) -->
       <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
         <div class="flex items-center justify-between">
