@@ -1,12 +1,10 @@
 <template>
-  <div class="h-screen flex overflow-hidden bg-gray-50">
+  <div class="h-screen grid grid-cols-[auto_1fr] overflow-hidden bg-gray-50">
     <!-- Sidebar -->
-    <div class="w-64 flex-shrink-0">
-      <AppSidebar />
-    </div>
+    <AppSidebar />
     
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col overflow-hidden">
+    <div class="flex flex-col overflow-hidden">
       <!-- Main Content -->
       <main class="flex-1 overflow-y-auto p-6">
         <slot />
