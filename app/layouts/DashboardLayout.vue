@@ -7,16 +7,21 @@
       @click="closeSidebar"
     ></div>
     
-    <!-- Sidebar -->
-    <div :class="[
-      'fixed inset-y-0 left-0 z-30 w-64 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0',
-      sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-    ]">
+    <!-- Mobile Sidebar -->
+    <div 
+      v-if="sidebarOpen"
+      class="fixed inset-y-0 left-0 z-30 w-64 flex-shrink-0 transform transition-transform duration-300 ease-in-out translate-x-0 lg:hidden"
+    >
       <AppSidebarMobile @close="closeSidebar" />
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <div class="hidden lg:flex lg:flex-shrink-0">
+      <AppSidebar />
     </div>
     
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col overflow-hidden lg:ml-0">
+    <div class="flex-1 flex flex-col overflow-hidden"
       <!-- Mobile header -->
       <div class="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
         <button
@@ -40,6 +45,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+import AppSidebar from '~/components/AppSidebar.vue'
+import AppSidebarMobile from '~/components/AppSidebarMobile.vue'
 
 // Estado da sidebar para mobile
 const sidebarOpen = ref(false)
