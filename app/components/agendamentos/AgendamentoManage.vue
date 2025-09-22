@@ -1,87 +1,90 @@
 <template>
-  <div class="h-full flex flex-col overflow-hidden">
-    <!-- Header - altura fixa para mobile -->
-    <div class="border-2 border-dashed border-blue-500 p-2 sm:p-4 mb-2 sm:mb-4 flex-shrink-0">
-      <!-- Primeira linha: Controlador, Profissional e Botão Novo -->
-      <div class="flex flex-col gap-2 mb-2">
-        <!-- Mobile: Layout empilhado -->
-        <div class="block sm:hidden">
-          <!-- Avatar e Botão Novo (primeira linha no mobile) -->
-          <div class="flex items-center justify-between mb-3">
-            <!-- Avatar Upload -->
-            <AvatarUpload 
-              :avatar-url="null"
-              :user-name="userStore.profile?.nome"
-              @upload="handleAvatarUpload"
-            />
-            
-            <!-- Botão Novo -->
-            <BaseButton 
-              @click="novoAgendamento"
-              variant="primary"
-              size="sm"
-              class="flex items-center gap-2"
-            >
-              <PlusIcon class="w-4 h-4" />
-              <span>Novo</span>
-            </BaseButton>
-          </div>
+  <div class="h-full flex flex-col overflow-hidden p-2 sm:p-4">
+    <!-- Header compacto - altura fixa para mobile -->
+    <div class="flex-shrink-0 mb-2 sm:mb-4">
+      <!-- Mobile: Layout empilhado mais compacto -->
+      <div class="block sm:hidden space-y-2">
+        <!-- Avatar e Botão Novo (primeira linha no mobile) -->
+        <div class="flex items-center justify-between">
+          <AvatarUpload 
+            :avatar-url="null"
+            :user-name="userStore.profile?.nome"
+            @upload="handleAvatarUpload"
+            class="scale-75"
+          />
           
-          <!-- Informações do profissional (segunda linha no mobile) -->
-          <div class="mb-3">
-            <ProfissionalInfo />
-          </div>
-          
-          <!-- Controlador de semana (terceira linha no mobile) -->
-          <div>
-            <SemanaController />
-          </div>
+          <BaseButton 
+            @click="novoAgendamento"
+            variant="primary"
+            size="sm"
+            class="flex items-center gap-2"
+          >
+            <PlusIcon class="w-4 h-4" />
+            <span>Novo</span>
+          </BaseButton>
         </div>
         
-        <!-- Desktop: Layout horizontal -->
-        <div class="hidden sm:flex items-center justify-between gap-3">
-          <!-- Lado esquerdo: Controlador de semana -->
-          <div class="flex-shrink-0">
-            <SemanaController />
-          </div>
-          
-          <!-- Centro: Informações do profissional -->
-          <div class="flex-1 flex justify-center">
-            <ProfissionalInfo />
-          </div>
-          
-          <!-- Lado direito: Avatar e Botão Novo Agendamento -->
-          <div class="flex-shrink-0 flex items-center gap-3">
-            <!-- Avatar Upload -->
-            <AvatarUpload 
-              :avatar-url="null"
-              :user-name="userStore.profile?.nome"
-              @upload="handleAvatarUpload"
-            />
-            
-            <!-- Botão Novo -->
-            <BaseButton 
-              @click="novoAgendamento"
-              variant="primary"
-              size="sm"
-              class="flex items-center gap-2"
-            >
-              <PlusIcon class="w-4 h-4" />
-              <span>Novo</span>
-            </BaseButton>
-          </div>
+        <!-- Informações do profissional (segunda linha no mobile) -->
+        <div class="text-center">
+          <ProfissionalInfo />
+        </div>
+        
+        <!-- Controlador de semana (terceira linha no mobile) -->
+        <div>
+          <SemanaController />
+        </div>
+        
+        <!-- Lista de dias -->
+        <div class="overflow-x-auto">
+          <ListaDias :dias="agendamentoStore.diasSemana" />
         </div>
       </div>
       
-      <!-- Lista de dias -->
-      <div class="w-full">
-        <ListaDias :dias="agendamentoStore.diasSemana" />
+      <!-- Desktop: Layout horizontal -->
+      <div class="hidden sm:block">
+        <div class="border-2 border-dashed border-blue-500 p-4 mb-4">
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <!-- Lado esquerdo: Controlador de semana -->
+            <div class="flex-shrink-0">
+              <SemanaController />
+            </div>
+            
+            <!-- Centro: Informações do profissional -->
+            <div class="flex-1 flex justify-center">
+              <ProfissionalInfo />
+            </div>
+            
+            <!-- Lado direito: Avatar e Botão Novo Agendamento -->
+            <div class="flex-shrink-0 flex items-center gap-3">
+              <AvatarUpload 
+                :avatar-url="null"
+                :user-name="userStore.profile?.nome"
+                @upload="handleAvatarUpload"
+              />
+              
+              <BaseButton 
+                @click="novoAgendamento"
+                variant="primary"
+                size="sm"
+                class="flex items-center gap-2"
+              >
+                <PlusIcon class="w-4 h-4" />
+                <span>Novo</span>
+              </BaseButton>
+            </div>
+          </div>
+          
+          <!-- Lista de dias -->
+          <div class="w-full">
+            <ListaDias :dias="agendamentoStore.diasSemana" />
+          </div>
+        </div>
       </div>
     </div>
     
     <!-- Corpo - ocupa o restante do espaço com scroll -->
     <div class="flex-1 overflow-hidden">
-      <div class="h-full p-2 sm:p-4">
+      <div class="h-full">
         <!-- Estado de carregamento -->
         <div v-if="agendamentoStore.carregandoAgendamentos" class="flex items-center justify-center h-full">
           <div class="text-center">
