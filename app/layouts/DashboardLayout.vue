@@ -21,7 +21,7 @@
     </div>
     
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col overflow-hidden"
+    <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Mobile header -->
       <div class="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 flex items-center justify-between">
         <button

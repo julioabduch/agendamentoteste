@@ -1,73 +1,112 @@
 <template>
-  <div class="p-2 sm:p-4 h-full flex flex-col">
-    <!-- Header - altura flexível para acomodar componentes -->
-    <div class="border-2 border-dashed border-blue-500 p-2 sm:p-4 mb-4 flex flex-col">
+  <div class="h-full flex flex-col overflow-hidden">
+    <!-- Header - altura fixa para mobile -->
+    <div class="border-2 border-dashed border-blue-500 p-2 sm:p-4 mb-2 sm:mb-4 flex-shrink-0">
       <!-- Primeira linha: Controlador, Profissional e Botão Novo -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2">
-        <!-- Lado esquerdo: Controlador de semana -->
-        <div class="w-full sm:w-auto sm:flex-shrink-0 order-2 sm:order-1">
-          <SemanaController />
-        </div>
-        
-        <!-- Centro: Informações do profissional -->
-        <div class="w-full sm:flex-1 sm:flex sm:justify-center order-3 sm:order-2">
-          <ProfissionalInfo />
-        </div>
-        
-        <!-- Lado direito: Avatar e Botão Novo Agendamento -->
-        <div class="w-full sm:w-auto sm:flex-shrink-0 flex items-center justify-between sm:justify-end gap-3 order-1 sm:order-3">
-          <!-- Avatar Upload -->
-          <AvatarUpload 
-            :avatar-url="null"
-            :user-name="userStore.profile?.nome"
-            @upload="handleAvatarUpload"
-          />
+      <div class="flex flex-col gap-2 mb-2">
+        <!-- Mobile: Layout empilhado -->
+        <div class="block sm:hidden">
+          <!-- Avatar e Botão Novo (primeira linha no mobile) -->
+          <div class="flex items-center justify-between mb-3">
+            <!-- Avatar Upload -->
+            <AvatarUpload 
+              :avatar-url="null"
+              :user-name="userStore.profile?.nome"
+              @upload="handleAvatarUpload"
+            />
+            
+            <!-- Botão Novo -->
+            <BaseButton 
+              @click="novoAgendamento"
+              variant="primary"
+              size="sm"
+              class="flex items-center gap-2"
+            >
+              <PlusIcon class="w-4 h-4" />
+              <span>Novo</span>
+            </BaseButton>
+          </div>
           
-          <!-- Botão Novo -->
-          <BaseButton 
-            @click="novoAgendamento"
-            variant="primary"
-            size="sm"
-            class="flex items-center gap-2"
-          >
-            <PlusIcon class="w-4 h-4" />
-            <span class="hidden xs:inline">Novo</span>
-          </BaseButton>
+          <!-- Informações do profissional (segunda linha no mobile) -->
+          <div class="mb-3">
+            <ProfissionalInfo />
+          </div>
+          
+          <!-- Controlador de semana (terceira linha no mobile) -->
+          <div>
+            <SemanaController />
+          </div>
+        </div>
+        
+        <!-- Desktop: Layout horizontal -->
+        <div class="hidden sm:flex items-center justify-between gap-3">
+          <!-- Lado esquerdo: Controlador de semana -->
+          <div class="flex-shrink-0">
+            <SemanaController />
+          </div>
+          
+          <!-- Centro: Informações do profissional -->
+          <div class="flex-1 flex justify-center">
+            <ProfissionalInfo />
+          </div>
+          
+          <!-- Lado direito: Avatar e Botão Novo Agendamento -->
+          <div class="flex-shrink-0 flex items-center gap-3">
+            <!-- Avatar Upload -->
+            <AvatarUpload 
+              :avatar-url="null"
+              :user-name="userStore.profile?.nome"
+              @upload="handleAvatarUpload"
+            />
+            
+            <!-- Botão Novo -->
+            <BaseButton 
+              @click="novoAgendamento"
+              variant="primary"
+              size="sm"
+              class="flex items-center gap-2"
+            >
+              <PlusIcon class="w-4 h-4" />
+              <span>Novo</span>
+            </BaseButton>
+          </div>
         </div>
       </div>
       
-      <!-- Segunda linha: Lista de dias -->
+      <!-- Lista de dias -->
       <div class="w-full">
         <ListaDias :dias="agendamentoStore.diasSemana" />
       </div>
     </div>
     
-    <!-- Corpo - ocupa o restante do espaço -->
-    <div class="flex-1 p-4">
-      <!-- Estado de carregamento -->
-      <div v-if="agendamentoStore.carregandoAgendamentos" class="flex items-center justify-center h-full">
-        <div class="text-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-          <p class="text-gray-500">Carregando agendamentos...</p>
+    <!-- Corpo - ocupa o restante do espaço com scroll -->
+    <div class="flex-1 overflow-hidden">
+      <div class="h-full p-2 sm:p-4">
+        <!-- Estado de carregamento -->
+        <div v-if="agendamentoStore.carregandoAgendamentos" class="flex items-center justify-center h-full">
+          <div class="text-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+            <p class="text-gray-500">Carregando agendamentos...</p>
+          </div>
         </div>
-      </div>
-      
-      <!-- Estado de erro -->
-      <div v-else-if="agendamentoStore.erroAgendamentos" class="flex items-center justify-center h-full">
-        <div class="text-center">
-          <p class="text-red-500 mb-2">{{ agendamentoStore.erroAgendamentos }}</p>
-          <BaseButton @click="carregarAgendamentos" variant="outline" size="sm">
-            Tentar novamente
-          </BaseButton>
+        
+        <!-- Estado de erro -->
+        <div v-else-if="agendamentoStore.erroAgendamentos" class="flex items-center justify-center h-full">
+          <div class="text-center">
+            <p class="text-red-500 mb-2">{{ agendamentoStore.erroAgendamentos }}</p>
+            <BaseButton @click="carregarAgendamentos" variant="outline" size="sm">
+              Tentar novamente
+            </BaseButton>
+          </div>
         </div>
+        
+        <!-- Grade de agendamentos -->
+        <ReguaHorarios 
+          v-else 
+          :agendamentos="agendamentosExemplo" 
+          @agendamento-clicado="handleAgendamentoClicado"
+        />
       </div>
-      
-      <!-- Grade de agendamentos -->
-      <ReguaHorarios 
-        v-else 
-        :agendamentos="agendamentosExemplo" 
-        @agendamento-clicado="handleAgendamentoClicado"
-      />
     </div>
 
     <!-- Modal Novo Agendamento -->
